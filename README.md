@@ -188,3 +188,12 @@ dbt-core 1.12 and dbt-duckdb. The migration is in the commit history; most of th
 dialect differences — `DATETIME` → `TIMESTAMP`, numeric casting for `ROUND`, and
 lowercasing every identifier after a case-sensitivity collision between `BRONZE` and
 `Bronze` cost a debugging session.
+
+- **Station imputation is limited by a change in source coordinate precision.**
+  Files from before 2025 carry full-precision lat/lng, and missing-station rows in that
+  period are successfully snapped to the nearest dock within 50 m. From 2025 onward the
+  feed rounds coordinates to two decimal places — roughly a 1.1 km × 0.85 km box at DC's
+  latitude, some twenty times the snap radius and wide enough to contain dozens of docks
+  downtown. Imputation on those rows would return a confidently wrong station with no
+  error raised, which is worse than a null, so they are left quarantined under
+  `unresolvable_coord_precision`.
