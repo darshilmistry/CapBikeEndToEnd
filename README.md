@@ -1,5 +1,7 @@
 # Capital Bikeshare — End-to-End
 
+<a href="https://github.com/darshilmistry">< Go to profile</a>
+
 <img src="./DashboardScreenShot.png" >
 
 An ELT pipeline that ingests publicly available Capital Bikeshare trip data into a medallion-architecture warehouse, validates and remediates it, and serves the result through a REST API and dashboard.
@@ -66,7 +68,7 @@ The main case is trips with missing station IDs but valid coordinates: these are
 the nearest known station within **50 m** using `CROSS JOIN LATERAL … ORDER BY dist LIMIT 1`,
 and flagged with boolean columns so consumers can separate measured from inferred values.
 
-< !-- Roughly **40%** of ingested rows are quarantined; **80%** of those are recovered, leaving under **[X]%** genuinely unusable. --> 
+<!-- Roughly **40%** of ingested rows are quarantined; **80%** of those are recovered, leaving under **[X]%** genuinely unusable. --> 
 
 ### Timezone correctness
 
