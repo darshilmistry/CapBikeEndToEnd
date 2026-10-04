@@ -1,5 +1,7 @@
 # Capital Bikeshare — End-to-End
 
+<img src="./DashboardScreenShot.png" >
+
 An ELT pipeline that ingests publicly available Capital Bikeshare trip data into a medallion-architecture warehouse, validates and remediates it, and serves the result through a REST API and dashboard.
 
 The entire stack runs in Docker. `docker compose up` brings up everything.
