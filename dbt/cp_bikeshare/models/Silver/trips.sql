@@ -1,5 +1,22 @@
 {{ config(materialized='table', schema='silver') }}
 
+WITH direct AS (
+
+    SELECT 
+        d.*,
+        'Clean' AS dq_status 
+    FROM {{ source('bronze', 'trips') }} d
+
+    WHERE NOT EXISTS (
+        SELECT 1 FROM {{ ref('QUARANTINE') }} q
+        WHERE q.ride_id = d.ride_id
+    )
+
+), quarantined AS (
+    SELECT * FROM {{ ref('QTN_RESOLUTION') }}
+)
+
+
 SELECT
     ride_id,
     rideable_type,
@@ -13,10 +30,8 @@ SELECT
     end_station_name AS end_stn_name,
     ROUND(end_lat::numeric, 5) AS end_lat,
     ROUND(end_lng::numeric, 5) AS end_lng,
-    member_casual AS rider_type
-FROM {{ source('bronze', 'trips') }}
-
-WHERE NOT EXISTS (
-    SELECT 1 FROM {{ ref('QUARANTINE') }} q
-    WHERE q.ride_id = trips.ride_id
-)
+    member_casual AS rider_type,
+    dq_status
+FROM direct
+  UNION ALL
+SELECT * FROM quarantined

@@ -1,0 +1,9 @@
+snapshots:
+  - name: fct_trips_snapshot
+    relation: ref('fct_trips')
+    config:
+      schema: snapshots
+      unique_key: ride_id
+      strategy: timestamp
+      updated_at: modified_at
+      hard_deletes: invalidate
